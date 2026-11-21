@@ -1,0 +1,29 @@
+<view class="page-pad">
+  <view style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+    <view bindtap="goBack" style="width:32px;height:32px;border-radius:16px;background:#e3f2fd;display:flex;align-items:center;justify-content:center;font-size:14px;color:#022A99">←</view>
+    <view class="section-title" style="margin-bottom:0">门店设置</view>
+  </view>
+  <view class="card">
+    <view style="font-size:14px;font-weight:bold;color:#333;margin-bottom:8px">WiFi 信息（顾客端展示）</view>
+    <input class="input" value="{{wifiName}}" bindinput="onWifiNameIn" placeholder="WiFi 名称" style="margin-bottom:8px"/>
+    <input class="input" value="{{wifiPass}}" bindinput="onWifiPassIn" placeholder="WiFi 密码" type="text" style="margin-bottom:8px"/>
+  </view>
+  <view class="card" style="margin-top:12px">
+    <view style="font-size:14px;font-weight:bold;color:#333;margin-bottom:8px">联系电话</view>
+    <input class="input" value="{{phone}}" bindinput="onPhoneIn" placeholder="客服电话" type="number"/>
+    <view style="font-size:11px;color:#999;margin-top:8px">该号码为门店客服电话，用于顾客端展示与联系，请勿填写他人号码。</view>
+  </view>
+  <view class="card" style="margin-top:12px">
+    <view style="display:flex;justify-content:space-between;align-items:center">
+      <view style="font-size:14px;font-weight:bold;color:#333">自动同意退款</view>
+      <switch checked="{{autoApproveRefund}}" bindchange="onAutoApproveChange" color="#022A99"/>
+    </view>
+    <view style="font-size:11px;color:#999;margin-top:8px">开启后：顾客申请退款将立即退回余额，无需商家逐单同意；距开始不足 15 分钟的订单不可退款。</view>
+  </view>
+  <button class="btn-primary" style="margin-top:16px" bindtap="save">保存设置</button>
+  <view style="text-align:center;margin-top:24px;font-size:12px;color:#ccc">
+    <text style="color:#022A99" bindtap="openAgreement">《用户服务协议》</text>
+    <text> · </text>
+    <text style="color:#022A99" bindtap="openPrivacy">《隐私政策》</text>
+  </view>
+</view>

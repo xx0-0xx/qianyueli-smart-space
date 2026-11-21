@@ -1,0 +1,39 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/index/index",
+    "pages/store/store",
+    "pages/order/order",
+    "pages/control/control",
+    "pages/availability/availability",
+    "pages/redeem/redeem",
+    "pages/mine/mine",
+    "pages/voucher-recharge/voucher-recharge",
+    "pages/recharge/recharge",
+    "pages/agreement/agreement",
+    "pages/privacy/privacy"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#16161f",
+    "navigationBarTitleText": "金之莱无人空间",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#8a8a9a",
+    "selectedColor": "#d4af37",
+    "backgroundColor": "#1e1e2c",
+    "borderStyle": "black",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "首页", "iconPath": "static/home.png", "selectedIconPath": "static/home-active.png" },
+      { "pagePath": "pages/order/order", "text": "订单", "iconPath": "static/cart.png", "selectedIconPath": "static/cart-active.png" },
+      { "pagePath": "pages/mine/mine", "text": "我的", "iconPath": "static/order.png", "selectedIconPath": "static/order-active.png" }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "requiredPrivateInfos": ["getLocation"],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "为您显示附近的门店"
+    }
+  }
+}

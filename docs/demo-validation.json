@@ -1,0 +1,82 @@
+{
+  "date": "2026-11-21",
+  "scope": "Read-only UI fixture service only; not the Go backend or real devices",
+  "checks": [
+    {
+      "method": "GET",
+      "path": "/admin/stores",
+      "expected_status": 200,
+      "passed": true
+    },
+    {
+      "method": "GET",
+      "path": "/merchant/orders",
+      "expected_status": 200,
+      "passed": true
+    },
+    {
+      "method": "GET",
+      "path": "/merchant/customers?keyword=%E6%BC%94%E7%A4%BA%E9%A1%BE%E5%AE%A21",
+      "expected_status": 200,
+      "passed": true
+    },
+    {
+      "method": "POST",
+      "path": "/admin/login/web",
+      "expected_status": 200,
+      "passed": true
+    },
+    {
+      "method": "POST",
+      "path": "/admin/login/web",
+      "expected_status": 401,
+      "passed": true
+    },
+    {
+      "method": "POST",
+      "path": "/merchant/invite-login/web",
+      "expected_status": 200,
+      "passed": true
+    },
+    {
+      "method": "POST",
+      "path": "/devices/401/control",
+      "expected_status": 405,
+      "passed": true
+    },
+    {
+      "method": "POST",
+      "path": "/merchant/orders/501/refund",
+      "expected_status": 405,
+      "passed": true
+    },
+    {
+      "method": "PUT",
+      "path": "/merchant/customers/601/membership",
+      "expected_status": 405,
+      "passed": true
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/stores/101",
+      "expected_status": 405,
+      "passed": true
+    },
+    {
+      "method": "GET",
+      "path": "/not-implemented",
+      "expected_status": 404,
+      "passed": true
+    },
+    {
+      "page_port": 5173,
+      "demo_banner_present": true,
+      "passed": true
+    },
+    {
+      "page_port": 5174,
+      "demo_banner_present": true,
+      "passed": true
+    }
+  ]
+}

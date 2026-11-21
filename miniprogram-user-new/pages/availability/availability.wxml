@@ -1,0 +1,28 @@
+<view class="page-pad">
+  <view style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+    <view bindtap="goBack" style="width:32px;height:32px;border-radius:16px;background:#26263a;display:flex;align-items:center;justify-content:center;font-size:14px;color:#d4af37">←</view>
+    <view style="font-size:18px;font-weight:bold;color:#f0d060">房间时段</view>
+  </view>
+
+  <view style="background:#1e1e2c;border-radius:12px;overflow:hidden">
+    <scroll-view scroll-x style="width:100%">
+      <view style="min-width:800px">
+        <!-- 表头：时间 -->
+        <view style="display:flex;border-bottom:1px solid #2a2a3a">
+          <view style="width:80px;flex-shrink:0;padding:8px 4px;font-size:12px;color:#8a8a9a;text-align:center">房间</view>
+          <view wx:for="{{hours}}" wx:key="*this" style="width:28px;flex-shrink:0;padding:4px 0;font-size:10px;color:#8a8a9a;text-align:center">{{item}}</view>
+        </view>
+        <!-- 数据行 -->
+        <view wx:for="{{rows}}" wx:key="id" style="display:flex;border-bottom:1px solid #2a2a3a">
+          <view style="width:80px;flex-shrink:0;padding:6px 4px;font-size:11px;color:#ddd;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{item.name}}</view>
+          <view wx:for="{{item.cells}}" wx:key="*this" wx:for-item="c" style="width:28px;flex-shrink:0;height:18px;background:{{c===1?'#d4af37':'#26263a'}};border-right:1px solid #2a2a3a"></view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view style="display:flex;gap:16px;margin-top:12px;font-size:11px;color:#8a8a9a">
+    <view style="display:flex;align-items:center;gap:4px"><view style="width:12px;height:12px;background:#d4af37;border-radius:2px"></view>已预约</view>
+    <view style="display:flex;align-items:center;gap:4px"><view style="width:12px;height:12px;background:#26263a;border-radius:2px;border:1px solid #2a2a3a"></view>空闲</view>
+  </view>
+</view>

@@ -1,0 +1,12 @@
+<view style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px;background:#f5f5f5">
+  <view style="font-size:22px;font-weight:bold;color:#022A99;margin-bottom:8px">商家后台</view>
+  <view style="font-size:12px;color:#999;margin-bottom:36px">Smart Space</view>
+  <input class="input" value="{{inviteCode}}" bindinput="onInput" placeholder="请输入门店邀请码" maxlength="12"
+         style="margin-bottom:16px;text-transform:uppercase;letter-spacing:2px" confirm-type="go" bindconfirm="enter"/>
+  <button class="btn-primary" bindtap="enter" loading="{{loading}}" disabled="{{loading || !agreed}}" style="width:100%">进入后台</button>
+  <view style="display:flex;align-items:flex-start;margin-top:18px;width:100%">
+    <view bindtap="toggleAgree" style="width:18px;height:18px;border-radius:4px;box-sizing:border-box;border:1px solid {{agreed?'#022A99':'#c0c0c0'}};background:{{agreed?'#022A99':'#fff'}};color:#fff;font-size:12px;line-height:16px;text-align:center;flex-shrink:0;margin-right:8px">{{agreed?'✓':''}}</view>
+    <view style="font-size:12px;color:#999;line-height:18px">我已阅读并同意<text style="color:#022A99" catchtap="openAgreement">《用户服务协议》</text>与<text style="color:#022A99" catchtap="openPrivacy">《隐私政策》</text></view>
+  </view>
+  <view style="font-size:11px;color:#ccc;margin-top:20px">邀请码由平台管理员发放，首次进入后免重复输入</view>
+</view>

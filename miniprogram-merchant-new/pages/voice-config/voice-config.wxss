@@ -1,0 +1,194 @@
+.voice-page {
+  padding-bottom: 40px;
+}
+
+.page-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  font-size: 24px;
+  color: #0096c7;
+  background: #e6f6fb;
+  border-radius: 50%;
+}
+
+.tip-box {
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #0096c7;
+  background: #eef9fd;
+  border-radius: 8px;
+}
+
+.device-card {
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.device-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.device-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #263445;
+}
+
+.device-sn {
+  margin-top: 3px;
+  font-family: Consolas, monospace;
+  font-size: 11px;
+  color: #98a2b3;
+}
+
+.switch-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.switch-label {
+  font-size: 12px;
+  color: #667085;
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 9px;
+}
+
+.field-label {
+  flex: 0 0 62px;
+  font-size: 12px;
+  color: #667085;
+}
+
+.field-row .input {
+  flex: 1;
+  min-width: 0;
+}
+
+.reminder-title {
+  margin: 14px 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #344054;
+}
+
+.empty-reminder {
+  padding: 2px 0 8px;
+  font-size: 12px;
+  color: #98a2b3;
+}
+
+.reminder-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.minute-input {
+  flex: 0 0 76px;
+}
+
+.minute-label {
+  flex: 0 0 auto;
+  font-size: 12px;
+  color: #667085;
+}
+
+.command-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.remove-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  font-size: 18px;
+  color: #e94560;
+  background: #fdecef;
+  border-radius: 50%;
+}
+
+.add-reminder {
+  margin-top: 2px;
+}
+
+.save-btn {
+  margin: 8px 0 20px;
+}
+
+.reference-card {
+  padding: 14px;
+}
+
+.reference-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  color: #263445;
+}
+
+.reference-toggle {
+  font-size: 12px;
+  font-weight: 400;
+  color: #0096c7;
+}
+
+.voice-list {
+  max-height: 420px;
+  margin-top: 12px;
+}
+
+.voice-item {
+  display: flex;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 12px;
+  color: #667085;
+  border-bottom: 1px solid #f8f9fb;
+}
+
+.voice-code {
+  flex: 0 0 90px;
+  font-family: Consolas, monospace;
+  color: #0096c7;
+}
+
+.voice-text {
+  flex: 1;
+}
+
+.empty {
+  padding: 40px 0;
+  font-size: 13px;
+  color: #98a2b3;
+  text-align: center;
+}

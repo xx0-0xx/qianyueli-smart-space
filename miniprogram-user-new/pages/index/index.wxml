@@ -1,0 +1,85 @@
+<view class="page-pad" style="padding:0">
+  <!-- 状态栏占位（自定义导航） -->
+  <view style="height:{{statusBarH}}px"></view>
+  <view wx:if="{{!loggedIn}}" style="padding:72px 24px;text-align:center">
+    <view style="font-size:20px;font-weight:bold;color:#f0d060;margin-bottom:8px">欢迎来到金之莱无人空间</view>
+    <view style="font-size:14px;color:#9292a3;margin-bottom:24px">登录后即可查找门店并预约房间</view>
+    <button bindtap="goLogin" class="btn-primary" style="width:100%;max-width:320px">微信快捷登录</button>
+  </view>
+
+  <block wx:if="{{loggedIn}}">
+    <!-- 顶部大图 -->
+    <view wx:if="{{cover}}" style="height:260px;position:relative;border-radius:0 0 24px 24px;overflow:hidden">
+      <image src="{{cover}}" mode="aspectFill" style="width:100%;height:100%;position:absolute;top:0;left:0"/>
+      <view style="position:absolute;top:0;left:0;right:0;padding:12px 16px;display:flex;justify-content:space-between;align-items:center">
+        <view bindtap="showStoreList" style="background:rgba(0,0,0,0.42);border-radius:8px;padding:7px 12px;color:#fff;font-size:13px;display:flex;align-items:center;max-width:65%">
+          <text style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{storeName||'选择门店'}}</text>
+          <text style="margin-left:4px;font-size:10px;opacity:0.8">▼</text>
+        </view>
+        <view wx:if="{{locating}}" style="color:#fff;font-size:11px;background:rgba(0,0,0,0.35);border-radius:14px;padding:5px 12px">定位中...</view>
+      </view>
+      <view style="position:absolute;bottom:0;left:0;right:0;padding:40px 16px 16px;background:linear-gradient(transparent,rgba(0,0,0,0.6))">
+        <view style="font-size:13px;color:rgba(255,255,255,0.85)">{{storeAddr}}</view>
+        <view bindtap="openMap" style="margin-top:6px;font-size:12px;color:#FBCD08;text-decoration:underline">导航到店</view>
+      </view>
+    </view>
+    <view wx:if="{{!cover}}" style="height:200px;background:#202031;position:relative;border-radius:0 0 20px 20px;overflow:hidden">
+      <view style="position:absolute;top:0;left:0;right:0;padding:12px 16px;display:flex;justify-content:space-between;align-items:center">
+        <view bindtap="showStoreList" style="background:rgba(255,255,255,0.12);border-radius:14px;padding:5px 12px;color:#fff;font-size:12px;display:flex;align-items:center;max-width:60%">
+          <text style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{storeName||'选择门店'}}</text>
+          <text style="margin-left:4px;font-size:10px;opacity:0.8">▼</text>
+        </view>
+        <view wx:if="{{locating}}" style="color:#fff;font-size:11px;background:rgba(255,255,255,0.12);border-radius:14px;padding:5px 12px">定位中...</view>
+      </view>
+      <view style="position:absolute;bottom:0;left:0;right:0;padding:30px 16px 16px;display:flex;align-items:center;justify-content:center">
+        <view style="font-size:13px;opacity:0.8;color:#fff">{{storeAddr}}</view>
+      </view>
+    </view>
+
+    <!-- 中部：预约区 -->
+    <view style="padding:28px 20px 120px">
+      <view style="text-align:center;margin-bottom:32px">
+        <view style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px">
+          <view style="width:28px;height:1px;background:linear-gradient(90deg,transparent,#d4af37)"></view>
+          <view style="width:5px;height:5px;border-radius:50%;background:#d4af37"></view>
+          <view style="width:28px;height:1px;background:linear-gradient(90deg,#d4af37,transparent)"></view>
+        </view>
+        <view style="font-size:24px;font-weight:bold;color:#f0d060;letter-spacing:2px">{{storeName}}</view>
+        <view style="font-size:13px;color:#8a8a9a;margin-top:10px;letter-spacing:1px">24小时营业 · 提前预约 · 到店即玩</view>
+      </view>
+      <button bindtap="goBook" style="height:56px;line-height:56px;font-size:18px;font-weight:bold;border:none;border-radius:16px;background:linear-gradient(135deg,#f0d060,#d4af37);color:#1a1a2e;box-shadow:0 6px 16px rgba(212,175,55,0.35);width:100%">立即预约</button>
+      <view style="font-size:12px;color:#666;text-align:center;margin-top:16px;letter-spacing:1px">在线选时段 · 自助开门</view>
+    </view>
+
+    <!-- 底部固定快捷栏 -->
+    <view style="position:fixed;bottom:0;left:0;right:0;background:#1e1e2c;border-top:1px solid #2a2a3a;padding:6px 16px 30px;display:flex;gap:10px">
+      <view bindtap="goRedeem" style="flex:1;height:52px;border-radius:10px;background:#26263a;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.2)">
+        <text style="font-size:14px;font-weight:bold;color:#f0d060">券码兑换</text>
+      </view>
+      <view bindtap="showWifi" style="flex:1;height:52px;border-radius:10px;background:#26263a;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.2)">
+        <text style="font-size:14px;font-weight:bold;color:#f0d060">连接WiFi</text>
+      </view>
+      <view bindtap="callPhone" style="flex:1;height:52px;border-radius:10px;background:#26263a;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.2)">
+        <text style="font-size:14px;font-weight:bold;color:#f0d060">联系客服</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- 门店选择弹窗 -->
+  <view wx:if="{{showStoreList}}" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);display:flex;align-items:flex-end;justify-content:center;z-index:999" bindtap="hideStoreList">
+    <view style="background:#1e1e2c;border-radius:20px 20px 0 0;padding:24px;width:100%;max-width:420px" catchtap="noop">
+      <view style="font-size:17px;font-weight:bold;color:#f0d060;margin-bottom:16px;text-align:center">选择门店</view>
+      <block wx:if="{{storeList.length>0}}">
+        <view wx:for="{{storeList}}" wx:key="id" bindtap="pickStore" data-id="{{item.id}}" style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #2a2a3a">
+          <view style="flex:1">
+            <view style="font-size:15px;font-weight:bold;color:#eee">{{item.name}}</view>
+            <view style="font-size:12px;color:#8a8a9a;margin-top:3px">{{item.address}}</view>
+          </view>
+          <text wx:if="{{item._distText}}" style="font-size:12px;color:#d4af37;background:rgba(212,175,55,0.12);padding:2px 8px;border-radius:8px;margin-left:8px">{{item._distText}}</text>
+        </view>
+      </block>
+      <view wx:if="{{storeList.length===0}}" style="font-size:13px;color:#5a5a6a;text-align:center;padding:20px 0">暂无门店</view>
+      <button class="btn-sm" style="background:#26263a;color:#8a8a9a;margin-top:16px" bindtap="hideStoreList">取消</button>
+    </view>
+  </view>
+</view>

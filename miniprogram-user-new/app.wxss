@@ -1,0 +1,67 @@
+page {
+  background: #16161f;
+  color: #eeeef2;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+button::after { border: 0; }
+button[disabled] { opacity: 0.45; }
+
+.card {
+  background: #1e1e2c;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.card-title { color: #f0d060; font-size: 16px; font-weight: 600; margin-bottom: 10px; }
+.btn-primary {
+  height: 48px;
+  line-height: 48px;
+  border: 0;
+  border-radius: 10px;
+  color: #1a1a2e;
+  background: #d4af37;
+  font-size: 16px;
+  font-weight: 600;
+}
+.btn-primary:active, .btn-sm:active { opacity: .78; }
+.btn-sm {
+  min-height: 34px;
+  line-height: 34px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 8px;
+  font-size: 13px;
+}
+.btn-gold { background: #d4af37; color: #1a1a2e; font-weight: 600; }
+.btn-blue { background: #303044; color: #e4c45c; }
+.btn-off { background: #26263a; color: #777789; }
+.input {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  box-sizing: border-box;
+  border: 1px solid #38384b;
+  border-radius: 10px;
+  color: #eeeef2;
+  background: #1e1e2c;
+}
+.input::placeholder { color: #777789; }
+.page-pad { padding: 16px 16px calc(24px + env(safe-area-inset-bottom)); }
+.section-title { color: #f0d060; font-size: 15px; font-weight: 600; margin: 18px 0 10px; }
+.tag { display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+.tag-on { color: #e4c45c; background: rgba(212,175,55,.14); }
+.tag-off { color: #9292a3; background: #29293a; }
+.tag-warn { color: #f0ad67; background: rgba(240,173,103,.12); }
+.empty { padding: 36px 20px; text-align: center; color: #9292a3; font-size: 13px; }
+.state-message { padding: 16px 12px; text-align: center; color: #9292a3; font-size: 13px; }
+.state-error { color: #f08d82; }
+.row { display: flex; align-items: center; justify-content: space-between; }
+.doc { padding: 20px 18px 48px; font-size: 14px; line-height: 1.8; color: #c9c9d6; }
+.doc-title { font-size: 20px; font-weight: bold; color: #f0d060; margin-bottom: 6px; }
+.doc-meta { font-size: 12px; color: #8a8a9a; margin-bottom: 20px; }
+.doc-h { font-size: 15px; font-weight: bold; color: #e4c45c; margin: 20px 0 8px; }
+.doc-p { margin-bottom: 10px; }

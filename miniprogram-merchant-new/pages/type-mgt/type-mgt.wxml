@@ -1,0 +1,15 @@
+<view class="page-pad">
+  <view class="section-title" style="margin-bottom:12px">房型管理</view>
+  <view style="display:flex;gap:8px;margin-bottom:12px">
+    <input class="input" value="{{typeName}}" bindinput="onTypeInput" placeholder="输入房型名称" style="flex:1;height:36px;border-radius:8px"/>
+    <button class="btn-sm btn-blue" style="height:36px;line-height:36px;flex-shrink:0" bindtap="addType">添加</button>
+  </view>
+  <block wx:for="{{types}}" wx:key="id">
+    <view class="card" style="margin-bottom:8px;padding:0">
+      <view style="display:flex;align-items:center;padding:14px 18px">
+        <text style="font-size:14px;color:#333;flex:1">{{item.name}}</text>
+        <button class="btn-sm" style="background:#e94560;color:#fff;width:60px;text-align:center" bindtap="delType" data-id="{{item.id}}">删除</button>
+      </view>
+    </view>
+  </block>
+</view>

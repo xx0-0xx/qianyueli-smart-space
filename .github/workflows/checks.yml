@@ -1,0 +1,56 @@
+name: Source checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+          cache-dependency-path: backend/go.sum
+      - name: Test Go packages
+        working-directory: backend
+        run: go test ./...
+
+  frontend:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - directory: admin-web-v3
+            views: src/views/ssm
+          - directory: admin-merchant-v3
+            views: src/views/merchant
+    defaults:
+      run:
+        working-directory: ${{ matrix.directory }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '11.5.0'
+      - name: Install pinned dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Create non-secret local environment
+        shell: pwsh
+        run: '& ../scripts/setup-local.ps1'
+      - name: Check business UI lint
+        run: pnpm exec eslint ${{ matrix.views }} src/router src/config/axios
+      - name: Check TypeScript
+        run: pnpm ts:check
+      - name: Build web UI
+        run: pnpm build
+      - name: Build desktop UI
+        run: pnpm build:desktop --outDir dist-desktop

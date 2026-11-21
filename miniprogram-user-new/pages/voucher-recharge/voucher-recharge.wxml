@@ -1,0 +1,32 @@
+<view class="page-pad">
+  <view wx:if="{{error}}" class="error">{{error}}</view>
+
+  <view class="card">
+    <view class="title">选择平台</view>
+    <view class="platforms">
+      <view wx:for="{{platforms}}" wx:key="platform" class="platform {{platform === item.platform ? 'active' : ''}}" data-value="{{item.platform}}" bindtap="pickPlatform">{{item.label}}</view>
+      <view wx:if="{{platforms.length === 0}}" class="muted">该门店暂无已授权平台</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="title">团购券</view>
+    <button class="btn" bindtap="scanCode">扫码</button>
+    <input class="input" value="{{code}}" bindinput="onCodeInput" placeholder="扫描或粘贴券码/抖音短链" />
+  </view>
+
+  <button class="primary" loading="{{loading}}" bindtap="prepare">验券</button>
+
+  <view wx:if="{{prepare}}" class="card preview">
+    <view class="title">{{prepare.ticket_name}}</view>
+    <view class="amount">可充值 ¥{{prepare.payAmountYuan}}</view>
+    <view class="muted">确认后平台将核销该券，金额充入当前门店余额</view>
+    <button class="primary" loading="{{submitting}}" bindtap="confirm">确认充值</button>
+  </view>
+
+  <view wx:if="{{result}}" class="card success">
+    <view class="title">充值成功</view>
+    <view class="amount">¥{{result.amountYuan}}</view>
+    <view class="muted">当前余额 ¥{{result.newBalanceYuan}}</view>
+  </view>
+</view>

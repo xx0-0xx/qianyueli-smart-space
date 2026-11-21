@@ -1,0 +1,105 @@
+<view class="page-pad">
+  <view class="member-head">
+    <view class="member-back" bindtap="goBack">←</view>
+    <view class="section-title member-title">会员管理</view>
+  </view>
+
+  <view wx:if="{{noStore}}" class="card member-empty-card">
+    <view class="empty member-empty">请先在首页选择门店</view>
+    <button class="btn-sm btn-blue member-empty-btn" bindtap="goDashboard">返回首页</button>
+  </view>
+
+  <block wx:else>
+    <view class="card member-search-card">
+      <view class="member-search-row">
+        <input class="input member-search" value="{{keywordInput}}" placeholder="搜索昵称或手机号" confirm-type="search" bindinput="onKeywordInput" bindconfirm="onSearch" />
+        <button class="btn-sm btn-blue member-search-btn" bindtap="onSearch">搜索</button>
+      </view>
+      <view class="member-note">等级在电脑后台管理，如需新增或调整请前往电脑端。</view>
+    </view>
+
+    <view wx:if="{{error}}" class="card member-error-card">
+      <view class="member-error">{{error}}</view>
+      <button class="btn-sm btn-blue member-retry" bindtap="reload">重新加载</button>
+    </view>
+
+    <view wx:if="{{customers.length===0 && loading}}" class="empty member-loading">加载中...</view>
+    <view wx:if="{{customers.length===0 && !loading && !error}}" class="empty member-loading">{{keyword?'未找到匹配客户':'暂无门店客户'}}</view>
+
+    <block wx:for="{{customers}}" wx:key="id">
+      <view class="card member-card">
+        <view class="member-top">
+          <view class="member-name-wrap">
+            <text class="member-name">{{item.nickname}}</text>
+            <text wx:if="{{item.isMember}}" class="tag {{item.expired?'tag-warn':'tag-on'}}">{{item.expired?'会员已到期':'会员'}}</text>
+          </view>
+          <text class="member-uid">#{{item.id}}</text>
+        </view>
+        <view class="member-phone">{{item.phone||'未授权手机号'}}</view>
+        <view class="member-stats">
+          <view class="member-stat">
+            <text class="member-stat-value">{{item.order_count}}</text>
+            <text class="member-stat-label">订单数</text>
+          </view>
+          <view class="member-stat">
+            <text class="member-stat-value">¥{{item.totalSpent}}</text>
+            <text class="member-stat-label">净消费</text>
+          </view>
+        </view>
+        <view wx:if="{{item.isMember}}" class="member-current">
+          <text class="member-current-level">{{item.levelName||'会员'}}</text>
+          <text wx:if="{{item.levelStatus===0}}" class="tag tag-off member-level-off">等级已停用</text>
+          <text class="member-current-expiry">{{item.expiryText==='长期有效'?'长期有效':'至 '+item.expiryText}}</text>
+          <text wx:if="{{item.remark}}" class="member-remark">{{item.remark}}</text>
+        </view>
+        <view class="member-actions">
+          <button class="btn-sm btn-blue member-action" bindtap="openMembership" data-id="{{item.id}}">{{item.isMember?'调整会员':'设为会员'}}</button>
+          <button wx:if="{{item.isMember}}" class="btn-sm member-action member-remove" bindtap="removeMembership" data-id="{{item.id}}" disabled="{{removingId==item.id}}">{{removingId==item.id?'处理中...':'取消会员'}}</button>
+        </view>
+      </view>
+    </block>
+
+    <view wx:if="{{customers.length>0}}" class="member-footer">
+      <view wx:if="{{loadingMore}}" class="member-foot-text">加载中...</view>
+      <view wx:elif="{{hasMore}}" class="member-more" bindtap="loadMore">加载更多</view>
+      <view wx:else class="member-foot-text">已加载全部 {{total}} 位客户</view>
+    </view>
+  </block>
+
+  <view wx:if="{{showSheet}}" class="sheet-mask" bindtap="closeSheet">
+    <view class="member-sheet" catchtap="noop">
+      <view class="sheet-title">设置会员</view>
+      <view class="sheet-sub">{{selectedCustomer.nickname}} · {{selectedCustomer.phone}}</view>
+
+      <view class="sheet-label">会员等级</view>
+      <scroll-view scroll-y class="level-list">
+        <view wx:for="{{activeLevels}}" wx:key="id" class="level-option {{selectedLevelId==item.id?'level-selected':''}}" bindtap="pickLevel" data-id="{{item.id}}">
+          <text class="level-name">{{item.name}}</text>
+          <text class="level-discount">{{item.discountText}}</text>
+        </view>
+        <view wx:if="{{!levelsLoaded}}" class="sheet-empty">加载中...</view>
+        <view wx:elif="{{levelsError}}" class="sheet-empty">
+          <view>{{levelsError}}</view>
+          <button class="btn-sm btn-blue sheet-retry" bindtap="retryLevels">重试</button>
+        </view>
+        <view wx:elif="{{activeLevels.length===0}}" class="sheet-empty">暂无可用等级，请在电脑后台添加或启用等级</view>
+      </scroll-view>
+
+      <view class="sheet-label">有效期（可选）</view>
+      <view class="date-row">
+        <picker mode="date" value="{{expiresDate}}" start="{{todayStr}}" bindchange="onExpiresChange">
+          <view class="date-value {{expiresDate?'':'date-placeholder'}}">{{expiresDate||'长期有效（不设置到期日）'}}</view>
+        </picker>
+        <view wx:if="{{expiresDate}}" class="date-clear" bindtap="clearExpires">清除</view>
+      </view>
+
+      <view class="sheet-label">备注（可选）</view>
+      <textarea class="sheet-remark" value="{{remark}}" maxlength="120" placeholder="例如：老客户、线下办理" bindinput="onRemarkInput"></textarea>
+
+      <view class="sheet-actions">
+        <button class="btn-primary sheet-save" bindtap="saveMembership" disabled="{{saving||!levelsLoaded||activeLevels.length===0||!selectedLevelId}}">{{saving?'保存中...':'保存'}}</button>
+        <button class="btn-sm sheet-cancel" bindtap="closeSheet">取消</button>
+      </view>
+    </view>
+  </view>
+</view>

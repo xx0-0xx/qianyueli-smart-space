@@ -1,0 +1,132 @@
+<view class="page-pad">
+  <!-- 顶部：返回 + 标题 -->
+  <view style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+    <view bindtap="goBack" style="width:32px;height:32px;border-radius:16px;background:#e3f2fd;display:flex;align-items:center;justify-content:center;font-size:14px;color:#022A99">←</view>
+    <view class="section-title" style="margin-bottom:0;flex:1">设备管理</view>
+  </view>
+
+  <!-- 房型分组（不含未分配） -->
+  <block wx:for="{{groups}}" wx:key="id" wx:for-item="grp">
+    <block wx:if="{{grp.id!==0}}">
+      <view class="card">
+        <view class="card-title">{{grp.name}}</view>
+
+        <block wx:for="{{grp.rooms}}" wx:key="id" wx:for-item="room">
+          <view style="border-top:1px solid #f0f0f0">
+            <!-- 房间头（点击展开/收起） -->
+            <view class="row" bindtap="toggleRoom" data-rid="{{room.id}}" style="padding:12px 0">
+              <view style="display:flex;align-items:center;gap:6px">
+                <text style="font-size:14px;font-weight:bold;color:#333">{{room.name}}</text>
+                <text class="tag tag-off">{{room.devices.length}} 设备</text>
+              </view>
+              <text style="font-size:12px;color:#022A99">{{expandedRoom===room.id?'收起 ▲':'展开 ▼'}}</text>
+            </view>
+
+            <!-- 展开：设备列表 -->
+            <block wx:if="{{expandedRoom===room.id}}">
+              <view wx:for="{{room.devices}}" wx:key="id" wx:for-item="dev" style="border-top:1px solid #f0f0f0;padding:12px 0">
+                <!-- 设备名 + 类型 + 改名/删除 -->
+                <view class="row">
+                  <view style="display:flex;align-items:center;gap:6px">
+                    <view style="width:6px;height:6px;border-radius:50%;background:#4caf50"></view>
+                    <text style="font-size:14px;color:#333">{{dev.name}}</text>
+                    <text class="tag" style="background:{{dev.status===1?'#e8f5e9':'#f5f5f5'}};color:{{dev.status===1?'#4caf50':'#999'}}">{{dev.status===1?'在线':'离线'}}</text>
+                  </view>
+                  <view style="display:flex;gap:12px">
+                    <text bindtap="editDev" data-id="{{dev.id}}" data-name="{{dev.name}}" style="font-size:12px;color:#022A99">改名</text>
+                    <text bindtap="delDev" data-id="{{dev.id}}" style="font-size:12px;color:#e94560">删除</text>
+                  </view>
+                </view>
+
+                <!-- 控制按钮 -->
+                <view style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
+                  <button wx:for="{{dev.buttons}}" wx:key="cmd" wx:for-item="btn" class="btn-sm btn-blue" style="padding:0 12px" data-id="{{dev.id}}" data-cmd="{{btn.cmd}}" bindtap="sendCmd">{{btn.label}}</button>
+                </view>
+
+                <view style="margin-top:10px;display:flex;align-items:center;justify-content:space-between">
+                  <text style="font-size:12px;color:#667085">用户端小程序允许控制</text>
+                  <switch checked="{{dev.userControlEnabled}}" data-id="{{dev.id}}" data-enabled="{{dev._userControlStr}}" bindchange="toggleUserControl" color="#022A99" />
+                </view>
+                <!-- 预约结束自动关闭 -->
+                <view style="margin-top:10px;display:flex;align-items:center;justify-content:space-between">
+                  <text style="font-size:12px;color:#999">预约结束自动断电</text>
+                  <view bindtap="toggleAutoClose" data-id="{{dev.id}}" data-close="{{dev._closeStr}}" class="tag" style="background:{{dev._autoBg}};color:{{dev._autoColor}}">{{dev._autoText}}</view>
+                </view>
+              </view>
+            </block>
+          </view>
+        </block>
+      </view>
+    </block>
+  </block>
+
+  <!-- 未分配设备（单独卡片，排最后） -->
+  <block wx:for="{{groups}}" wx:key="id" wx:for-item="grp">
+    <block wx:if="{{grp.id===0}}">
+      <view class="card">
+        <view class="card-title">未分配设备</view>
+        <view style="font-size:11px;color:#999;margin-bottom:4px">选择房间后，设备即归入该房间</view>
+
+        <block wx:for="{{grp.rooms}}" wx:key="id" wx:for-item="room">
+          <view wx:for="{{room.devices}}" wx:key="id" wx:for-item="dev" style="border-top:1px solid #f0f0f0;padding:12px 0">
+            <view class="row">
+              <view style="display:flex;align-items:center;gap:6px">
+                <text style="font-size:14px;color:#333">{{dev.name}}</text>
+                <text class="tag" style="background:{{dev.status===1?'#e8f5e9':'#f5f5f5'}};color:{{dev.status===1?'#4caf50':'#999'}}">{{dev.status===1?'在线':'离线'}}</text>
+              </view>
+              <view style="display:flex;align-items:center;gap:12px">
+                <button class="btn-sm btn-gold" style="padding:0 12px" bindtap="assignDev" data-id="{{dev.id}}">分配</button>
+                <text bindtap="delDev" data-id="{{dev.id}}" style="font-size:12px;color:#e94560">删除</text>
+              </view>
+            </view>
+
+            <!-- 控制按钮 -->
+            <view style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
+              <button wx:for="{{dev.buttons}}" wx:key="cmd" wx:for-item="btn" class="btn-sm btn-blue" style="padding:0 12px" data-id="{{dev.id}}" data-cmd="{{btn.cmd}}" bindtap="sendCmd">{{btn.label}}</button>
+            </view>
+            <view style="margin-top:10px;display:flex;align-items:center;justify-content:space-between">
+              <text style="font-size:12px;color:#667085">用户端小程序允许控制</text>
+              <switch checked="{{dev.userControlEnabled}}" data-id="{{dev.id}}" data-enabled="{{dev._userControlStr}}" bindchange="toggleUserControl" color="#022A99" />
+            </view>
+          </view>
+        </block>
+      </view>
+    </block>
+  </block>
+
+  <view wx:if="{{groups.length===0}}" class="empty">暂无设备</view>
+
+  <!-- 添加设备 -->
+  <button class="btn-primary" style="margin-top:16px" bindtap="showBind">+ 添加设备</button>
+
+  <!-- 选择设备绑定房间 -->
+  <view wx:if="{{showRoomPick}}" style="position:fixed;top:0;right:0;bottom:0;left:0;z-index:1000;background:rgba(20,28,40,.48);display:flex;align-items:flex-end" bindtap="cancelRoomPick">
+    <view style="box-sizing:border-box;width:100%;max-height:82vh;padding:20px 18px calc(20px + env(safe-area-inset-bottom));background:#fff;border-radius:14px 14px 0 0" catchtap="noop">
+      <view style="font-size:17px;font-weight:bold;color:#202938;text-align:center;margin-bottom:14px">选择设备所在房间</view>
+      <scroll-view scroll-y style="height:55vh;max-height:55vh">
+        <view wx:for="{{roomChoices}}" wx:key="id" bindtap="selectRoom" data-id="{{item.id}}" style="min-height:56px;box-sizing:border-box;padding:12px 4px;border-bottom:1px solid #edf0f3;display:flex;align-items:center;justify-content:space-between">
+          <view style="display:flex;flex-direction:column;gap:4px;min-width:0">
+            <text style="font-size:15px;font-weight:600;color:#263445">{{item.name}}</text>
+            <text style="font-size:12px;color:#8993a4">{{item.resource_type.name||'房间'}}</text>
+          </view>
+          <text style="font-size:20px;color:#8993a4">›</text>
+        </view>
+      </scroll-view>
+      <button class="btn-sm btn-off" style="width:100%;margin-top:12px" bindtap="cancelRoomPick">取消添加</button>
+    </view>
+  </view>
+
+  <!-- 产品模板选择弹窗 -->
+  <view wx:if="{{showTemplatePick}}" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);display:flex;align-items:flex-end;justify-content:center;z-index:999" bindtap="hideTemplatePick">
+    <view style="background:#fff;border-radius:20px 20px 0 0;padding:24px;width:100%;max-width:420px" catchtap="noop">
+      <view style="font-size:16px;font-weight:bold;color:#022A99;margin-bottom:14px;text-align:center">选择产品</view>
+      <scroll-view scroll-y style="max-height:50vh">
+        <view wx:for="{{templateList}}" wx:key="id" bindtap="pickTemplate" data-id="{{item.id}}" style="padding:14px 0;border-bottom:1px solid #f0f0f0">
+          <view style="font-size:15px;font-weight:bold;color:#333">{{item.name}}</view>
+          <view style="font-size:11px;color:#999;margin-top:3px">{{item.protocol==='ascii'?'成品控制器':'自制固件'}} · {{item.devices.length}} 路</view>
+        </view>
+      </scroll-view>
+      <button class="btn-sm btn-off" style="margin-top:12px;width:100%" bindtap="hideTemplatePick">取消</button>
+    </view>
+  </view>
+</view>

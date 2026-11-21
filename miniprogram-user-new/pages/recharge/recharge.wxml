@@ -1,0 +1,20 @@
+<view class="page-pad">
+  <view style="background:#1e1e2c;border-radius:16px;padding:20px">
+    <view style="font-size:13px;color:#8a8a9a;margin-bottom:10px">充值金额</view>
+    <view style="display:flex;align-items:baseline;margin-bottom:16px">
+      <text style="font-size:18px;color:#d4af37;font-weight:bold">¥</text>
+      <input type="number" value="{{amount}}" bindinput="onAmount" placeholder="输入金额（元）" style="flex:1;font-size:22px;font-weight:bold;color:#f0d060;margin-left:4px"/>
+    </view>
+    <view style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+      <view wx:for="{{presets}}" wx:key="*this" bindtap="pickPreset" data-v="{{item}}" style="flex:0 0 30%;text-align:center;padding:10px 0;border-radius:10px;font-size:14px;color:{{amount===item?'#1a1a2e':'#d4af37'}};background:{{amount===item?'linear-gradient(135deg,#f0d060,#d4af37)':'rgba(255,255,255,0.06)'}};border:1px solid {{amount===item?'transparent':'#2a2a3a'}};font-weight:{{amount===item?'bold':'normal'}}">¥{{item}}</view>
+    </view>
+    <view style="font-size:12px;color:#5a5a6a;margin-bottom:16px">线下付款后，请联系店员确认到账</view>
+    <button bindtap="submit" style="height:46px;line-height:46px;font-size:15px;font-weight:bold;border:none;border-radius:12px;background:linear-gradient(135deg,#f0d060,#d4af37);color:#1a1a2e;width:100%">提交充值</button>
+  </view>
+
+  <view wx:if="{{submitted}}" style="background:#1e1e2c;text-align:center;padding:24px;margin-top:16px;border-radius:16px">
+    <view style="font-size:16px;font-weight:bold;color:#d4af37;margin-bottom:6px">充值单已提交</view>
+    <view style="font-size:13px;color:#8a8a9a">金额 ¥{{amountYuan}}</view>
+    <view style="font-size:12px;color:#5a5a6a;margin-top:8px">请按金额完成线下付款，店员确认后余额自动到账</view>
+  </view>
+</view>

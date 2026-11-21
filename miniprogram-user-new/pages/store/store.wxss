@@ -1,0 +1,3 @@
+page { background:#16161f; }
+.state-message { padding:12px 8px; text-align:center; color:#9292a3; font-size:12px; }
+.state-error { color:#f08d82; }

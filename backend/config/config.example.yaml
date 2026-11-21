@@ -1,0 +1,89 @@
+server:
+  port: 8080
+  mode: debug
+  read_timeout: 30s
+  write_timeout: 30s
+  public_url: http://localhost:8080
+  enable_mock: false
+  allowed_origins:
+  - http://localhost:5173
+  - http://localhost:5174
+  - http://127.0.0.1:8787
+  - http://127.0.0.1:8788
+  trusted_proxies:
+  - 127.0.0.1
+database:
+  host: 127.0.0.1
+  port: 3307
+  user: smart_space
+  password: local-dev-only
+  dbname: smart_space
+  max_open_conns: 100
+  max_idle_conns: 10
+  conn_max_lifetime: 3600s
+  auto_migrate: true
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: ''
+  db: 0
+  pool_size: 20
+mqtt:
+  broker: tcp://127.0.0.1:1884
+  client_id_prefix: smart-space-server
+  username: ''
+  password: ''
+  tls: false
+  ca_cert: ''
+  keepalive: 60s
+  ping_timeout: 10s
+jwt:
+  secret: change-me-in-production
+  access_token_ttl: 168h
+  refresh_token_ttl: 604800s
+login_security:
+  window: 15m
+  ip_max_failures: 30
+  code_max_failures: 20
+  lock_ttl: 30m
+  captcha_after: 3
+  captcha_ttl: 5m
+wechat:
+  miniprogram:
+    app_id: ''
+    app_secret: ''
+  pay:
+    mch_id: ''
+    api_key: ''
+    api_v3_key: ''
+    cert_path: ''
+    key_path: ''
+    notify_url: https://api.example.com/api/v1/payment/callback
+ota:
+  firmware_dir: ./firmwares
+  max_file_size: 10485760
+storage:
+  type: local
+  local_path: ./uploads
+  oss_endpoint: ''
+  oss_access_key: ''
+  oss_secret_key: ''
+  oss_bucket: ''
+alert:
+  enabled: false
+  webhook: ''
+  type: wecom
+scheduler:
+  order_timeout_check_interval: 30s
+  device_health_check_interval: 60s
+  auto_settle_interval: 300s
+  order_pending_pay_ttl: 900s
+lock:
+  booking_ttl: 30s
+  payment_idempotent_ttl: 86400s
+elys:
+  enabled: false
+  base_url: https://example.invalid
+  api_key: ''
+  webhook_account: ''
+  encrypt_key: ''

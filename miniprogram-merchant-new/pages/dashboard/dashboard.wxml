@@ -1,0 +1,105 @@
+<view class="dashboard page-pad">
+  <view class="store-bar" bindtap="showStoreSwitch">
+    <view class="store-mark"></view>
+    <text class="store-name">{{currentStoreName||'选择门店'}}</text>
+    <text class="store-switch">切换门店⌄</text>
+  </view>
+
+  <view class="hero-metric">
+    <view class="hero-label">今日营收</view>
+    <view class="hero-value">¥{{revenue}}</view>
+    <view class="hero-foot">今日订单 {{orderCount}} 笔</view>
+  </view>
+
+  <view class="metric-grid">
+    <view class="metric-item">
+      <view class="metric-value">{{activeRooms}}<text class="metric-unit"> / {{totalRooms}}</text></view>
+      <view class="metric-label">当前使用房间</view>
+    </view>
+    <view class="metric-item" bindtap="goReport">
+      <view class="metric-value">{{pendingOrders}}</view>
+      <view class="metric-label">待支付订单</view>
+    </view>
+  </view>
+
+  <view class="section-head">
+    <text class="section-title">待处理</text>
+    <text class="section-note">点击进入处理</text>
+  </view>
+  <view class="todo-list">
+    <view class="todo-row" bindtap="goOrders">
+      <view class="todo-copy"><text class="todo-title">待支付订单</text><text class="todo-sub">需确认或跟进</text></view>
+      <text class="todo-count">{{pendingOrders}}</text><text class="todo-arrow">›</text>
+    </view>
+    <view class="todo-row" bindtap="goRefunds">
+      <view class="todo-copy"><text class="todo-title">退款申请</text><text class="todo-sub">等待审核处理</text></view>
+      <text class="todo-count">{{pendingRefunds}}</text><text class="todo-arrow">›</text>
+    </view>
+    <view class="todo-row" bindtap="goRecharges">
+      <view class="todo-copy"><text class="todo-title">充值确认</text><text class="todo-sub">线下收款待确认</text></view>
+      <text class="todo-count">{{rechargeCount}}</text><text class="todo-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="quick-actions">
+    <view bindtap="goResources"><text class="quick-title">房间管理</text><text class="quick-desc">房间与设备绑定</text></view>
+    <view bindtap="goDevices"><text class="quick-title">设备管理</text><text class="quick-desc">状态与控制</text></view>
+    <view bindtap="goTimeline"><text class="quick-title">房间时段</text><text class="quick-desc">查看预约占用</text></view>
+    <view bindtap="goReport"><text class="quick-title">经营报表</text><text class="quick-desc">月度订单与营收</text></view>
+  </view>
+
+  <view class="section-head room-head">
+    <text class="section-title">房间状态</text>
+    <text class="section-note">{{activeRooms}} 间使用中</text>
+  </view>
+  <view class="room-tools">
+    <input class="room-search" placeholder="搜索房间或类型" value="{{roomKeyword}}" bindinput="onRoomSearch" />
+    <view class="filter-group">
+      <view class="filter-option {{roomFilter==='all'?'filter-selected':''}}" data-filter="all" bindtap="filterRoomStatus">全部</view>
+      <view class="filter-option {{roomFilter==='active'?'filter-selected':''}}" data-filter="active" bindtap="filterRoomStatus">使用中</view>
+      <view class="filter-option {{roomFilter==='free'?'filter-selected':''}}" data-filter="free" bindtap="filterRoomStatus">空闲</view>
+    </view>
+  </view>
+  <block wx:for="{{filteredRooms}}" wx:key="id">
+    <view class="room-card" bindtap="toggleRoom" data-id="{{item.id}}">
+      <view class="room-main">
+        <view class="room-state {{item.active?'room-busy':'room-free'}}"></view>
+        <view class="room-info"><text class="room-name">{{item.name}}</text><text class="room-type">{{item.typeName||'未分类'}}</text></view>
+        <text class="room-status {{item.active?'text-busy':'text-free'}}">{{item.active?'使用中 · '+item.remainText:'空闲'}}</text>
+      </view>
+      <view wx:if="{{expandedId===item.id}}" class="device-panel" catchtap="noop">
+        <view wx:if="{{item.devices.length===0}}" class="device-empty">未绑定设备</view>
+        <block wx:for="{{item.devices}}" wx:for-item="dev" wx:key="id">
+          <view class="device-row">
+            <view class="device-name">{{dev.name}} <text>{{dev.type}}</text></view>
+            <view class="device-actions">
+              <button wx:for="{{dev.controlButtons}}" wx:for-item="btn" wx:for-index="btnIndex" wx:key="cmd" class="control-button {{btnIndex===0?'primary-control':''}}" bindtap="sendCmd" data-id="{{dev.id}}" data-cmd="{{btn.cmd}}">{{btn.label}}</button>
+              <text wx:if="{{dev.controlButtons.length===0}}" class="device-empty">未配置控制命令</text>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </block>
+  <view wx:if="{{filteredRooms.length===0}}" class="empty">没有匹配的房间</view>
+  <view class="logout" bindtap="logout">退出登录</view>
+
+  <view wx:if="{{showStoreSwitch}}" class="sheet-mask" bindtap="hideStoreSwitch">
+    <view class="store-sheet" catchtap="noop">
+      <view class="sheet-title">选择门店</view>
+      <scroll-view scroll-y class="store-list">
+        <view wx:for="{{stores}}" wx:key="id" class="store-option" bindtap="pickStore" data-id="{{item.id}}">
+          <view class="store-option-copy"><text class="store-option-name">{{item.name}}</text><text class="store-option-address">{{item.address}}</text></view>
+          <text wx:if="{{item.id==currentStoreId}}" class="store-check">✓</text>
+        </view>
+        <view wx:if="{{stores.length===0}}" class="empty">暂无门店</view>
+      </scroll-view>
+      <view wx:if="{{!showBind}}" class="add-store" bindtap="showBind">+ 添加门店邀请码</view>
+      <view wx:if="{{showBind}}" class="bind-area">
+        <input value="{{bindCode}}" bindinput="onBindCode" placeholder="输入门店邀请码" class="bind-input" />
+        <button class="bind-button" bindtap="doBind">绑定门店</button>
+      </view>
+      <button class="sheet-close" bindtap="hideStoreSwitch">关闭</button>
+    </view>
+  </view>
+</view>

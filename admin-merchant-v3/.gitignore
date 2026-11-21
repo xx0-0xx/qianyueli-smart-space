@@ -1,0 +1,15 @@
+node_modules
+.DS_Store
+dist
+dist-ssr
+/dist*
+pnpm-debug
+auto-*.d.ts
+# Keep generated declaration seeds so a fresh checkout can run typecheck first.
+!src/types/auto-imports.d.ts
+!src/types/auto-components.d.ts
+.idea
+.history
+output/
+.playwright-cli/
+dev.log

@@ -1,0 +1,120 @@
+<view class="page-pad">
+  <view style="font-size:22px;font-weight:bold;color:#f0d060;margin-bottom:2px">{{store.name}}</view>
+  <view style="font-size:13px;color:#8a8a9a;margin-bottom:20px">{{store.address}}</view>
+
+  <view style="background:#1e1e2c;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,0.2)">
+    <view style="display:flex;justify-content:space-between;align-items:center">
+      <view style="font-size:16px;font-weight:bold;color:#f0d060;margin-bottom:0">选择时段</view>
+      <view bindtap="goAvailability" style="font-size:11px;color:#d4af37;background:rgba(212,175,55,0.12);padding:2px 8px;border-radius:10px">预约状态 →</view>
+    </view>
+    <view style="font-size:11px;color:#5a5a6a;margin-bottom:10px">
+      预约开始前15分钟可提前开门开电（房间空闲时）
+    </view>
+    <view style="font-size:11px;color:#8a8a9a;margin-bottom:10px;line-height:1.6">
+      选好开始时间后，灰色时段也可点选为结束时间；点击“明”切换到次日会重置选择，请重新选择开始时间。
+    </view>
+    <view style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">
+      <view wx:for="{{slots}}" wx:key="label" bindtap="tapSlot" data-idx="{{index}}" style="width:50px;height:32px;line-height:32px;text-align:center;border-radius:10px;font-size:12px;color:{{item.cs}};background:{{item.bg}};font-weight:{{item.fw}};border:{{item.bd}}">
+        {{item.label}}
+      </view>
+    </view>
+    <view wx:if="{{rangeText}}" style="padding:8px 14px;background:rgba(212,175,55,0.12);border-radius:10px;font-size:14px;color:#d4af37;font-weight:bold">
+      {{rangeText}}
+      <view style="font-size:11px;color:#8a8a9a;font-weight:normal">再点已选时段可重新选择</view>
+    </view>
+    <view wx:if="{{loadingAvailability}}" class="state-message">正在查询可预约房间…</view>
+    <view wx:if="{{availabilityError}}" class="state-message state-error" bindtap="retryAvailability">{{availabilityError}} · 点击重试</view>
+
+  </view>
+
+  <block wx:for="{{types}}" wx:key="id">
+    <view style="background:#1e1e2c;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,0.2)">
+      <view style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <view>
+          <view style="font-size:16px;font-weight:bold;color:#f0d060">{{item.name}}</view>
+          <view style="display:flex;align-items:baseline;gap:6px;margin-top:2px">
+            <text wx:if="{{item.memberPrice}}" style="font-size:11px;color:#5a5a6a;text-decoration:line-through">¥{{item.originalPriceText}}</text>
+            <text style="font-size:13px;color:{{item.memberPrice?'#d4af37':'#8a8a9a'}};font-weight:{{item.memberPrice?'bold':'normal'}}">¥{{item.priceText}}</text>
+            <text style="font-size:11px;color:#5a5a6a">/小时</text>
+            <text wx:if="{{item.memberPrice}}" style="font-size:10px;color:#d4af37;background:rgba(212,175,55,0.15);padding:1px 5px;border-radius:4px">会员价 · {{item.discountLabel || memberDiscountLabel}}</text>
+          </view>
+        </view>
+        <view style="font-size:12px;color:#5a5a6a">{{item.resources.length}}个可用</view>
+      </view>
+      <view wx:for="{{item.resources}}" wx:key="id" wx:for-item="room" style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid #2a2a3a">
+        <view style="display:flex;align-items:center;gap:8px;flex:1">
+          <view style="width:8px;height:8px;border-radius:50%;flex-shrink:0;background:#4caf50"></view>
+          <text style="font-size:14px;color:#ddd">{{room.name}}</text>
+        </view>
+        <button style="flex-shrink:0;width:64px;text-align:center;height:32px;line-height:32px;border-radius:8px;font-size:13px;border:none;background:linear-gradient(135deg,#f0d060,#d4af37);color:#1a1a2e;font-weight:bold" bindtap="book" data-rid="{{room.id}}" disabled="{{startIdx<0||endIdx<0||loadingAvailability||submitting}}">
+          预约
+        </button>
+      </view>
+      <view wx:if="{{item.resources.length===0}}" style="font-size:13px;color:#5a5a6a">
+        暂无空房
+      </view>
+    </view>
+  </block>
+  <view wx:if="{{!loadingAvailability && !availabilityError && types.length===0 && startIdx>=0 && endIdx>=0}}" class="empty">
+    当前时段暂无空房，请更换时间
+  </view>
+  <view wx:if="{{startIdx<0 || endIdx<0}}" class="empty">
+    选择开始和结束时间后查看空房
+  </view>
+
+  <!-- 确认弹窗 -->
+  <view wx:if="{{showConfirm}}" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);display:flex;align-items:flex-end;justify-content:center;z-index:999" bindtap="cancelBook">
+    <view style="background:#1e1e2c;border-radius:20px 20px 0 0;padding:28px 24px 36px;width:100%;max-width:420px" catchtap="noop">
+      <view style="width:40px;height:4px;background:#2a2a3a;border-radius:2px;margin:0 auto 16px"></view>
+      <view style="font-size:17px;font-weight:bold;color:#f0d060;margin-bottom:16px;text-align:center">确认预约</view>
+      
+      <view style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #2a2a3a">
+        <text style="color:#8a8a9a;font-size:14px">门店</text>
+        <text style="color:#ddd;font-size:14px">{{store.name}}</text>
+      </view>
+      <view style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #2a2a3a">
+        <text style="color:#8a8a9a;font-size:14px">房间</text>
+        <text style="color:#ddd;font-size:14px;font-weight:bold">{{confirmRoom}}</text>
+      </view>
+      <view style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #2a2a3a">
+        <text style="color:#8a8a9a;font-size:14px">时间</text>
+        <text style="color:#d4af37;font-size:14px">{{confirmTime}}</text>
+      </view>
+      <view style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #2a2a3a">
+        <text style="color:#8a8a9a;font-size:14px">时长</text>
+        <text style="color:#ddd;font-size:14px">{{confirmHours>=1?confirmHours+"小时":confirmMin+"分钟"}}</text>
+      </view>
+      <view style="font-size:10px;color:#5a5a6a;text-align:right;margin-top:2px">可提前15分钟开始控制</view>
+
+      <view wx:if="{{memberSavings}}" style="display:flex;justify-content:space-between;align-items:center;padding:10px 0 0">
+        <text style="font-size:12px;color:#d4af37;font-weight:bold">{{memberDiscountLabel || memberLevelName || '会员优惠'}}</text>
+        <text style="font-size:12px;color:#d4af37">已优惠 ¥{{memberSavings}}</text>
+      </view>
+
+      <view style="display:flex;justify-content:space-between;align-items:baseline;padding:16px 0">
+        <text style="font-size:14px;color:#8a8a9a">{{memberSavings ? '会员价' : '合计'}}</text>
+        <view style="display:flex;align-items:baseline;gap:8px">
+          <text wx:if="{{confirmHasDiscount}}" style="font-size:15px;color:#5a5a6a;text-decoration:line-through">¥{{originalPrice}}</text>
+          <text style="font-size:28px;font-weight:bold;color:#f0d060">{{confirmPrice}}</text>
+          <text style="font-size:14px;color:#8a8a9a">元</text>
+        </view>
+      </view>
+      <view wx:if="{{prorateNote}}" style="font-size:10px;color:#e94560;text-align:right;margin-top:-8px;margin-bottom:8px">{{prorateNote}}</view>
+
+      <!-- 支付方式：余额支付 -->
+      <view style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:10px;border:1px solid #d4af37;background:rgba(212,175,55,0.12);margin-bottom:14px">
+        <view>
+          <view style="font-size:14px;color:#d4af37;font-weight:bold">余额支付</view>
+          <view style="font-size:11px;color:#8a8a9a;margin-top:2px">当前余额 ¥{{balanceYuan}}</view>
+        </view>
+        <view style="width:20px;height:20px;border-radius:50%;background:#d4af37;display:flex;align-items:center;justify-content:center;color:#1a1a2e;font-size:12px">✓</view>
+      </view>
+      <view wx:if="{{balance<confirmPriceFen}}" style="font-size:11px;color:#e94560;margin-bottom:10px;text-align:center">余额不足，请先充值</view>
+
+      <view style="display:flex;gap:12px">
+        <button class="btn-sm" style="flex:1;background:#26263a;color:#8a8a9a;height:44px;line-height:44px;border-radius:12px;font-size:15px" bindtap="cancelBook">取消</button>
+        <button style="flex:1;height:44px;line-height:44px;border-radius:12px;font-size:15px;font-weight:bold;border:none;background:linear-gradient(135deg,#f0d060,#d4af37);color:#1a1a2e" bindtap="doBook">支付 ¥{{confirmPrice}}</button>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,27 @@
+page{background:#f5f5f7;color:#333;font-family:-apple-system,sans-serif}
+.card{background:#fff;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 1px 8px rgba(0,0,0,0.04)}
+.card-title{font-size:16px;font-weight:bold;color:#022A99;margin-bottom:10px}
+.btn-primary{background:#022A99;color:#fff;font-weight:bold;border:none;border-radius:12px;height:48px;line-height:48px;font-size:16px}
+.btn-primary:active{opacity:0.85}
+.btn-sm{height:32px;line-height:32px;padding:0 14px;border-radius:8px;font-size:13px;border:none}
+.btn-sm:active{opacity:0.85}
+.btn-gold{background:#FBCD08;color:#022A99;font-weight:bold}
+.btn-blue{background:#022A99;color:#fff;font-weight:bold}
+.btn-off{background:#f5f5f5;color:#999}
+.input{width:100%;height:48px;background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:0 16px;color:#333;box-sizing:border-box}
+.empty{text-align:center;color:#bbb;margin-top:80px;font-size:14px}
+.tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:bold}
+.tag-on{background:#e3f2fd;color:#022A99}
+.tag-off{background:#f5f5f5;color:#999}
+.tag-warn{background:#fff3e0;color:#e6a23c}
+.page-pad{padding:16px}
+.section-title{font-size:15px;font-weight:bold;color:#022A99;margin-bottom:10px}
+.status-free{color:#4caf50}
+.status-inuse{color:#022A99}
+.revenue{font-size:36px;font-weight:bold;color:#022A99}
+.row{display:flex;justify-content:space-between;align-items:center}
+.doc{padding:20px 18px 48px;font-size:14px;line-height:1.8;color:#3a3a3a}
+.doc-title{font-size:20px;font-weight:bold;color:#022A99;margin-bottom:6px}
+.doc-meta{font-size:12px;color:#999;margin-bottom:20px}
+.doc-h{font-size:15px;font-weight:bold;color:#222;margin:20px 0 8px}
+.doc-p{margin-bottom:10px}

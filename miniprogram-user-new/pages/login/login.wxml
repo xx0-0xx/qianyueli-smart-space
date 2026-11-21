@@ -1,0 +1,13 @@
+<view style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px;background:#16161f">
+  <block wx:if="{{showConsent}}">
+    <view style="font-size:20px;font-weight:bold;color:#f0d060;margin-bottom:16px">欢迎使用金之莱无人空间</view>
+    <view style="font-size:13px;color:#a9a9b8;line-height:1.8;text-align:center;margin-bottom:28px">在使用前，请阅读并同意<text style="color:#f0d060" catchtap="openAgreement">《用户服务协议》</text>与<text style="color:#f0d060" catchtap="openPrivacy">《隐私政策》</text>。我们会在您使用服务时，按照隐私政策收集与使用必要信息。</view>
+    <button class="btn-primary" bindtap="agree" style="width:100%">同意并继续</button>
+    <view style="font-size:13px;color:#8a8a9a;margin-top:20px" bindtap="disagree">暂不同意</view>
+  </block>
+  <block wx:else>
+    <view style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#f0d060,#d4af37);margin-bottom:16px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:bold;color:#1a1a2e">金</view>
+    <view style="font-size:22px;font-weight:bold;color:#f0d060;margin-bottom:8px">金之莱无人空间</view>
+    <view style="font-size:12px;color:#8a8a9a;margin-bottom:36px">正在登录...</view>
+  </block>
+</view>

@@ -1,0 +1,63 @@
+<view class="page-pad voice-page">
+  <view class="page-head">
+    <view class="back-btn" bindtap="goBack">‹</view>
+    <view class="section-title">语音播报</view>
+  </view>
+
+  <view class="tip-box">
+    配置本门店云喇叭的预置语音码，例如 mp3=00005。仅对本门店音响设备生效。
+  </view>
+
+  <view wx:if="{{loading}}" class="empty">加载中...</view>
+
+  <block wx:if="{{!loading}}">
+    <view wx:for="{{devices}}" wx:key="device_sn" wx:for-index="di" wx:for-item="device" class="card device-card">
+      <view class="device-head">
+        <view>
+          <view class="device-name">{{device.name}}</view>
+          <view class="device-sn">{{device.device_sn}}</view>
+        </view>
+        <view class="switch-wrap">
+          <text class="switch-label">{{device.enabled ? '已启用' : '已停用'}}</text>
+          <switch checked="{{device.enabled}}" data-index="{{di}}" bindchange="toggleEnabled" color="#0096c7" />
+        </view>
+      </view>
+
+      <view class="field-row">
+        <text class="field-label">开始使用</text>
+        <input class="input" value="{{device.on_start}}" placeholder="例如 mp3=00005" maxlength="64" data-index="{{di}}" bindinput="onStartInput" />
+      </view>
+      <view class="field-row">
+        <text class="field-label">结束使用</text>
+        <input class="input" value="{{device.on_end}}" placeholder="例如 mp3=00012" maxlength="64" data-index="{{di}}" bindinput="onEndInput" />
+      </view>
+
+      <view class="reminder-title">订单剩余时间提醒</view>
+      <view wx:if="{{device.reminders.length === 0}}" class="empty-reminder">尚未添加提醒</view>
+      <view wx:for="{{device.reminders}}" wx:key="index" wx:for-index="ri" wx:for-item="reminder" class="reminder-row">
+        <input class="input minute-input" type="number" value="{{reminder.minutes_before_end}}" data-di="{{di}}" data-ri="{{ri}}" bindinput="onReminderMinutes" />
+        <text class="minute-label">分钟后</text>
+        <input class="input command-input" value="{{reminder.command}}" placeholder="mp3=00009" maxlength="64" data-di="{{di}}" data-ri="{{ri}}" bindinput="onReminderCommand" />
+        <view class="remove-btn" data-di="{{di}}" data-ri="{{ri}}" bindtap="removeReminder">×</view>
+      </view>
+      <button wx:if="{{device.reminders.length < 10}}" class="btn-sm add-reminder" data-index="{{di}}" bindtap="addReminder">+ 添加提醒</button>
+    </view>
+
+    <view wx:if="{{devices.length === 0}}" class="empty">当前门店暂无云喇叭设备，请先在设备管理中添加音响设备</view>
+
+    <button class="btn-primary save-btn" loading="{{saving}}" bindtap="save">保存全部</button>
+
+    <view class="card reference-card">
+      <view class="reference-head" bindtap="toggleList">
+        <text>预置语音码对照</text>
+        <text class="reference-toggle">{{showList ? '收起' : '展开'}}</text>
+      </view>
+      <scroll-view wx:if="{{showList}}" scroll-y class="voice-list">
+        <view wx:for="{{voiceList}}" wx:key="code" class="voice-item">
+          <text class="voice-code">mp3={{item.code}}</text>
+          <text class="voice-text">{{item.text}}</text>
+        </view>
+      </scroll-view>
+    </view>
+  </block>
+</view>

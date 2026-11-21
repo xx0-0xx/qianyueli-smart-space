@@ -1,0 +1,26 @@
+<view class="page-pad">
+  <view style="font-size:18px;font-weight:bold;color:#f0d060;margin-bottom:12px">券码兑换</view>
+
+  <view wx:if="{{!verified}}">
+    <input value="{{code}}" bindinput="onCodeInput" placeholder="输入券码" maxlength="20" style="margin-bottom:12px;text-align:center;font-size:22px;letter-spacing:4px;width:100%;height:48px;background:#1e1e2c;border:1px solid #2a2a3a;border-radius:12px;padding:0 16px;color:#f0d060;box-sizing:border-box"/>
+    <button bindtap="verify" style="width:100%;height:48px;line-height:48px;font-size:16px;font-weight:bold;border:none;border-radius:12px;background:linear-gradient(135deg,#f0d060,#d4af37);color:#1a1a2e">验 证</button>
+    <view style="font-size:12px;color:#5a5a6a;text-align:center;margin-top:14px">输入后点击验证，核销后金额直接充入余额</view>
+  </view>
+
+  <view wx:if="{{verified && !used}}">
+    <view style="background:#1e1e2c;border-radius:16px;padding:24px;text-align:center;margin-bottom:14px">
+      <view style="font-size:14px;color:#8a8a9a;margin-bottom:6px">{{info.name}}</view>
+      <view style="font-size:16px;color:#8a8a9a;margin-bottom:12px">券码 {{info.code}}</view>
+      <view style="font-size:13px;color:#8a8a9a;margin-bottom:6px">可充值金额</view>
+      <view style="font-size:36px;font-weight:bold;color:#f0d060;margin-bottom:18px">¥{{info.amount/100}}</view>
+      <button bindtap="useCoupon" style="width:100%;height:48px;line-height:48px;font-size:16px;font-weight:bold;border:none;border-radius:12px;background:linear-gradient(135deg,#f0d060,#d4af37);color:#1a1a2e">立即兑换</button>
+    </view>
+  </view>
+
+  <view wx:if="{{used}}" style="background:#1e1e2c;border-radius:16px;padding:28px;text-align:center">
+    <view style="font-size:18px;font-weight:bold;color:#4caf50;margin-bottom:8px">兑换成功</view>
+    <view style="font-size:14px;color:#ddd;margin-bottom:6px">已充值 ¥{{used.amount/100}}</view>
+    <view style="font-size:13px;color:#8a8a9a">当前余额 ¥{{used.balance/100}}</view>
+    <view style="font-size:11px;color:#5a5a6a;margin-top:12px">正在跳转到「我的」...</view>
+  </view>
+</view>

@@ -1,0 +1,38 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/dashboard/dashboard",
+    "pages/orders/orders",
+    "pages/resource-types/resource-types",
+    "pages/resources-mgt/resources-mgt",
+    "pages/devices/devices",
+    "pages/report/report",
+    "pages/timeline/timeline",
+    "pages/voice-config/voice-config",
+    "pages/type-mgt/type-mgt",
+    "pages/pricing/pricing",
+    "pages/coupons/coupons",
+    "pages/store-config/store-config",
+    "pages/recharges/recharges",
+    "pages/membership/membership",
+    "pages/agreement/agreement",
+    "pages/privacy/privacy"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "商家后台",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#999",
+    "selectedColor": "#022A99",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/dashboard/dashboard", "text": "看板" },
+      { "pagePath": "pages/orders/orders", "text": "订单" },
+      { "pagePath": "pages/resource-types/resource-types", "text": "管理" }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

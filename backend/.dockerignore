@@ -1,0 +1,8 @@
+server
+server-*
+*.exe
+initial-credentials.txt
+config/config.yaml
+audio
+uploads
+*.log
